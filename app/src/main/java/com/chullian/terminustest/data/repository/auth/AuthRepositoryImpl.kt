@@ -9,6 +9,8 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -34,7 +36,7 @@ class AuthRepositoryImpl @Inject constructor(
         user?.updateProfile(profile.build())
         user?.let { firebaseAuth.updateCurrentUser(it) }
         if(result.user!=null){
-            storeProfileData(email,uri,name,bio)
+            storeProfileData(firebaseAuth.uid.toString(),bio)
         }
         getCurrentUserData()
         return firebaseAuth.currentUser ?: throw FirebaseAuthException("400", "User Not found")
@@ -48,16 +50,21 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun getCurrentUserData() {
         session.email =  firebaseAuth.currentUser?.email.toString()
         session.user =  firebaseAuth.currentUser?.displayName.toString()
+        fireStore.collection("user").document(firebaseAuth.uid.toString()).get().addOnSuccessListener {
+            session.userBio = it["bio"].toString()
+        }
         session.userImage = firebaseStorage.getReference("user"+firebaseAuth.currentUser?.uid+"avatar.jpg").downloadUrl.await()
             .toString()
     }
 
-    private suspend fun storeProfileData(email: String, uri: Uri, name: String, bio: String) {
-        fireStore.collection("user")
-            .add(mapOf("name" to name,"email" to email,"bio" to bio))
+    private suspend fun storeProfileData(uid: String, bio: String) {
+        fireStore.collection("user").document(uid)
+            .set(mapOf("bio" to bio))
             .await()
     }
-
     override fun isLoggedIn() = session.isLoggedIn
 
+    override fun logout() = flow<Boolean> {
+        firebaseAuth.signOut()
+    }
 }

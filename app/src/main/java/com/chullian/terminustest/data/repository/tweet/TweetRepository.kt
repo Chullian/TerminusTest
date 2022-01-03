@@ -10,4 +10,6 @@ interface TweetRepository {
     suspend fun sentTweet(tweet:String)
     suspend fun retrieveTweets(): Flow<List<TweetModel>>
     suspend fun updateTweetView(tweet:TweetModel)
+    suspend fun sync()
+    suspend fun deleteAll()
 }

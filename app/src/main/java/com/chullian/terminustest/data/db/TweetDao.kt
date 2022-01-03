@@ -14,6 +14,9 @@ interface TweetDao {
     @Query("SELECT * FROM tweet")
     fun findAll(): Flow<List<TweetModel>>
 
+    @Query("SELECT * FROM tweet WHERE sync=0")
+    suspend fun findAllOffline(): List<TweetModel>
+
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertOrReplace(obj: TweetModel): Long
@@ -26,5 +29,8 @@ interface TweetDao {
 
     @Update
     suspend fun update(obj: List<TweetModel>)
+
+    @Query("DELETE FROM tweet")
+    suspend fun deleteAll()
 
 }

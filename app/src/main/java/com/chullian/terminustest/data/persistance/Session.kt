@@ -11,7 +11,7 @@ import javax.inject.Inject
 class Session @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
-    val prefs = context.getSharedPreferences("Settings", MODE_PRIVATE)
+    var prefs = context.getSharedPreferences("Settings", MODE_PRIVATE)
 
     var isLoggedIn: Boolean
         get() = prefs.getBoolean("isLoggedIn", false)
@@ -23,6 +23,11 @@ class Session @Inject constructor(
         get() = prefs.getString("user","")?:""
         set(value) {
             prefs.edit().putString("user", value).apply()
+        }
+    var userBio: String
+        get() = prefs.getString("userBio","")?:""
+        set(value) {
+            prefs.edit().putString("userBio", value).apply()
         }
 
     var userImage: String
@@ -36,4 +41,8 @@ class Session @Inject constructor(
         set(value) {
             prefs.edit().putString("email", value).apply()
         }
+
+    fun clear(){
+        prefs.edit().clear().apply()
+    }
 }

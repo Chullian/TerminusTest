@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.chullian.terminustest.data.persistance.Session
 import com.chullian.terminustest.data.repository.auth.AuthRepository
 import com.chullian.terminustest.utils.PROGRESS_BAR_GONE
+import com.chullian.terminustest.utils.PROGRESS_BAR_VISIBLE
 import com.chullian.terminustest.utils.UiStates
 import com.google.firebase.auth.FirebaseAuthException
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,6 +26,10 @@ class RegistrationVM @Inject constructor(
 
     fun doRegister(email: String, pass: String, uri: Uri, name: String, bio: String) =
         viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(
+                progressBarState = PROGRESS_BAR_VISIBLE,
+                uiStates = UiStates.Idle
+            )
             try {
                 repository.doRegister(email, pass, uri, name, bio).let {
                     prefs.isLoggedIn = true

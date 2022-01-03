@@ -8,8 +8,16 @@ import kotlinx.coroutines.flow.Flow
  * Created by binMammootty on 02/01/2022.
  */
 interface AuthRepository {
-    suspend fun authenticate(email:String,pass:String): FirebaseUser?
-    suspend fun doRegister(email: String, pass: String, uri: Uri, name: String, bio: String):FirebaseUser?
+    suspend fun authenticate(email: String, pass: String): FirebaseUser?
+    suspend fun doRegister(
+        email: String,
+        pass: String,
+        uri: Uri,
+        name: String,
+        bio: String
+    ): FirebaseUser?
+
     suspend fun getCurrentUserData()
-    fun isLoggedIn():Boolean
+    fun isLoggedIn(): Boolean
+    fun logout(): Flow<Boolean>
 }

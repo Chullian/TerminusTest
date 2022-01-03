@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.chullian.terminustest.data.persistance.Session
 import com.chullian.terminustest.data.repository.auth.AuthRepository
 import com.chullian.terminustest.utils.PROGRESS_BAR_GONE
+import com.chullian.terminustest.utils.PROGRESS_BAR_VISIBLE
 import com.chullian.terminustest.utils.UiStates
 import com.google.firebase.auth.FirebaseAuthException
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,6 +25,10 @@ class LoginVM @Inject constructor(
 
 
     fun doLogin(email: String, pass: String) = viewModelScope.launch {
+        _uiState.value = _uiState.value.copy(
+            progressBarState = PROGRESS_BAR_VISIBLE,
+            uiStates = UiStates.Idle
+        )
         try {
             repository.authenticate(email, pass)?.let {
                 prefs.isLoggedIn = true

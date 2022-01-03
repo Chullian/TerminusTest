@@ -34,22 +34,37 @@ class TweetRepositoryImpl @Inject constructor(
             tweetId = tweetId(),
             tweet = tweet,
             author = prefs.user,
+            sync = false,
             authorImage = prefs.userImage,
             views = firebaseAuth.uid.toString(),
             createdAt = System.currentTimeMillis(),
             updatedAt = System.currentTimeMillis()
         )
         tweetDao.insertOrReplace(tweetModel)
-        fireStore.collection("tweet")
+        var result = fireStore.collection("tweet")
             .document(tweetModel.tweetId)
             .set(tweetModel)
             .await()
+        tweetModel.sync = true
+        tweetDao.update(tweetModel)
+    }
+
+    override suspend fun sync() {
+        val offlineTweets = tweetDao.findAllOffline()
+        offlineTweets.forEach { tweetModel ->
+            fireStore.collection("tweet")
+                .document(tweetModel.tweetId)
+                .set(tweetModel)
+                .await()
+            tweetModel.sync = true
+            tweetDao.update(tweetModel)
+        }
     }
 
     override suspend fun retrieveTweets(): Flow<List<TweetModel>> {
         fireStore.collection("tweet")
             .addSnapshotListener { value, error ->
-                launch{
+                launch {
                     value?.documents?.forEach { document ->
                         var tweetModel = TweetModel(
                             tweetId = document.id,
@@ -70,9 +85,13 @@ class TweetRepositoryImpl @Inject constructor(
     override suspend fun updateTweetView(tweet: TweetModel) {
         val list = tweet.views.split(",").toMutableList()
         list.add(firebaseAuth.uid.toString())
-        tweet.views = list.filter { it!=firebaseAuth.uid }.joinToString(",")
+        tweet.views = list.filter { it != firebaseAuth.uid }.joinToString(",")
         tweetDao.update(tweet)
         fireStore.collection("tweet").document(tweet.tweetId).set(tweet).await()
+    }
+
+    override suspend fun deleteAll() {
+        tweetDao.deleteAll()
     }
 }
 

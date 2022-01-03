@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         mainVm.isLoggedIn()
         observeUiChanges()
     }
@@ -41,11 +42,13 @@ class MainActivity : AppCompatActivity() {
                     when(it.uiStates.message){
                         "isLoggedIn"-> if(!it.isLoggedIn){
                             startActivity(Intent(this@MainActivity,LoginActivity::class.java))
+                            this@MainActivity.finish()
                         }else{
-
                             mainVm.getUserDetails()
                             startActivity(Intent(this@MainActivity,TweetActivity::class.java))
+                            this@MainActivity.finish()
                         }
+
                     }
                 }
             }

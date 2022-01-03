@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.view.View.GONE
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -14,10 +15,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import coil.load
 import coil.transform.CircleCropTransformation
+import com.chullian.terminustest.App
 import com.chullian.terminustest.activity.login.isEmail
 import com.chullian.terminustest.activity.login.isPassword
 import com.chullian.terminustest.activity.main.MainActivity
+import com.chullian.terminustest.activity.tweet.TweetActivity
 import com.chullian.terminustest.databinding.ActivityRegistrationBinding
+import com.chullian.terminustest.utils.PROGRESS_BAR_GONE
+import com.chullian.terminustest.utils.PROGRESS_BAR_VISIBLE
 import com.chullian.terminustest.utils.UiStates
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -37,8 +42,10 @@ class RegistrationActivity : AppCompatActivity() {
         ActivityResultContracts.GetContent()
     ) { uri ->
         imageUri = uri
-        binding.registrationImageIv.load(uri) {
-            transformations(CircleCropTransformation())
+        App.instance?.imageLoader?.let {
+            binding.registrationImageIv.load(uri, it) {
+                transformations(CircleCropTransformation())
+            }
         }
     }
 
@@ -81,9 +88,12 @@ class RegistrationActivity : AppCompatActivity() {
             }
             registrationImageIv.setOnClickListener {
                 when {
-                    checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED -> {getPicture.launch("image/*")}
+                    checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED -> {
+                        getPicture.launch("image/*")
+                    }
                     shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> {}
-                    else -> {requestPermissionLauncher.launch(Manifest.permission.CAMERA)
+                    else -> {
+                        requestPermissionLauncher.launch(Manifest.permission.CAMERA)
                     }
                 }
             }
@@ -102,6 +112,13 @@ class RegistrationActivity : AppCompatActivity() {
                 }
                 !registrationEmailEt.text.toString().isEmail() -> {
                     registrationEmailContainer.error = "Please provide a valid email address";false
+                }
+                imageUri == Uri.EMPTY -> {
+                    Toast.makeText(
+                        this@RegistrationActivity,
+                        "Please Provide Image",
+                        Toast.LENGTH_SHORT
+                    ).show();false
                 }
                 else -> true
             }
@@ -123,13 +140,12 @@ class RegistrationActivity : AppCompatActivity() {
                 }
                 is UiStates.Success -> {
                     when (it.uiStates.message) {
-                        "Registered" ->
-                            startActivity(
-                                Intent(
-                                    this@RegistrationActivity,
-                                    MainActivity::class.java
-                                )
-                            )
+                        "Registered" -> {
+                            val intent = Intent(this@RegistrationActivity, TweetActivity::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                            startActivity(intent)
+                        }
                     }
                 }
             }
@@ -137,8 +153,10 @@ class RegistrationActivity : AppCompatActivity() {
     }
 
     private fun progressBar(progressBarState: Int) {
+        binding.progressOverlay.root.setOnClickListener {}
         when (progressBarState) {
-
+            PROGRESS_BAR_GONE -> binding.progressOverlay.root.visibility = GONE
+            PROGRESS_BAR_VISIBLE -> binding.progressOverlay.root.visibility = GONE
         }
     }
 

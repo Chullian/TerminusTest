@@ -6,13 +6,17 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.chullian.terminustest.activity.main.MainActivity
 import com.chullian.terminustest.activity.registration.RegistrationActivity
+import com.chullian.terminustest.activity.tweet.TweetActivity
 import com.chullian.terminustest.databinding.ActivityLoginBinding
+import com.chullian.terminustest.utils.PROGRESS_BAR_GONE
+import com.chullian.terminustest.utils.PROGRESS_BAR_VISIBLE
 import com.chullian.terminustest.utils.UiStates
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -79,8 +83,10 @@ class LoginActivity : AppCompatActivity() {
                 }
                 is UiStates.Success -> {
                     when (it.uiStates.message) {
-                        "Logged In" ->
-                            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                        "Logged In" -> {
+                            startActivity(Intent(this@LoginActivity, TweetActivity::class.java))
+                            this@LoginActivity.finish()
+                        }
                     }
                 }
             }
@@ -88,11 +94,12 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun progressBar(progressBarState: Int) {
+        binding.progressOverlay.root.setOnClickListener{}
         when (progressBarState) {
-
+            PROGRESS_BAR_GONE ->binding.progressOverlay.root.visibility = View.GONE
+            PROGRESS_BAR_VISIBLE ->binding.progressOverlay.root.visibility = View.GONE
         }
     }
-
 }
 
 fun String.isEmail(): Boolean {

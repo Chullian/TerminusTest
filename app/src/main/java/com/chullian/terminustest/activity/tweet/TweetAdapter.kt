@@ -1,11 +1,14 @@
 package com.chullian.terminustest.activity.tweet
 
 import android.view.LayoutInflater
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.CircleCropTransformation
+import com.chullian.terminustest.App
 import com.chullian.terminustest.R
 import com.chullian.terminustest.data.model.TweetModel
 import com.chullian.terminustest.databinding.TweetItemBinding
@@ -54,14 +57,17 @@ class TweetAdapter(val onItemViewed: (tweet: TweetModel) -> Unit) :
                 tweetAutherTv.text = tweet.author
                 tweetMessageTv.text = tweet.tweet
                 if (tweet.views.split(",").isNotEmpty()) {
-                    tweetViewedByTv.text = "${tweet.views.split(",").size} views"
+                    tweetViewedByTv.visibility = VISIBLE
+                    tweetViewedByTv.text = "${tweet.views.split(",").size}"
                 } else {
-                    tweetViewedByTv.text = ""
+                    tweetViewedByTv.visibility = GONE
                 }
                 tweetTimeTv.text = getTimeAgo(tweet.createdAt)
-                tweetUserIv.load(tweet.authorImage) {
-                    transformations(CircleCropTransformation())
-                    placeholder(R.drawable.ic_person)
+                App.instance?.imageLoader?.let {
+                    tweetUserIv.load(tweet.authorImage, it) {
+                        transformations(CircleCropTransformation())
+                        placeholder(R.drawable.ic_person)
+                    }
                 }
             }
         }

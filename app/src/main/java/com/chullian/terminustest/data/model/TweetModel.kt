@@ -15,6 +15,7 @@ data class TweetModel(
     val author: String = "",
     val authorImage: String = "",
     var views: String = "",
+    var sync:Boolean = false,
     val createdAt: Long = SystemClock.currentThreadTimeMillis(),
     var updatedAt: Long = SystemClock.currentThreadTimeMillis()
 )
