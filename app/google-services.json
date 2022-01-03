@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "921066477158",
+    "project_id": "terminustest",
+    "storage_bucket": "terminustest.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:921066477158:android:e4a64a6ef47e1ec3173fa7",
+        "android_client_info": {
+          "package_name": "com.chullian.terminustest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "921066477158-5f21f7aknuehdg036hl9om4vnls790q4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlpfnwiRIYX3hNgi1l2jOZuplTA5wEBx8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "921066477158-5f21f7aknuehdg036hl9om4vnls790q4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
