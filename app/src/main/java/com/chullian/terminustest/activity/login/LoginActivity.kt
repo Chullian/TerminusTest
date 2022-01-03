@@ -97,7 +97,7 @@ class LoginActivity : AppCompatActivity() {
         binding.progressOverlay.root.setOnClickListener{}
         when (progressBarState) {
             PROGRESS_BAR_GONE ->binding.progressOverlay.root.visibility = View.GONE
-            PROGRESS_BAR_VISIBLE ->binding.progressOverlay.root.visibility = View.GONE
+            PROGRESS_BAR_VISIBLE ->binding.progressOverlay.root.visibility = View.VISIBLE
         }
     }
 }

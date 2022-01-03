@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -53,8 +54,20 @@ class RegistrationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityRegistrationBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.toolbar2)
+        supportActionBar?.apply {
+            title = "Register User"
+            setDisplayHomeAsUpEnabled(true)
+            setHomeButtonEnabled(true)
+        }
+
         initViews()
         observeUiChanges()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
     }
 
     private val requestPermissionLauncher =
@@ -113,6 +126,10 @@ class RegistrationActivity : AppCompatActivity() {
                 !registrationEmailEt.text.toString().isEmail() -> {
                     registrationEmailContainer.error = "Please provide a valid email address";false
                 }
+                registrationPassEt.text.toString()!=registrationRePassEt.text.toString()  -> {
+                    registrationPassEt.error = "Passwords not match"
+                    registrationRePassEt.error = "Passwords not match";false
+                }
                 imageUri == Uri.EMPTY -> {
                     Toast.makeText(
                         this@RegistrationActivity,
@@ -156,7 +173,7 @@ class RegistrationActivity : AppCompatActivity() {
         binding.progressOverlay.root.setOnClickListener {}
         when (progressBarState) {
             PROGRESS_BAR_GONE -> binding.progressOverlay.root.visibility = GONE
-            PROGRESS_BAR_VISIBLE -> binding.progressOverlay.root.visibility = GONE
+            PROGRESS_BAR_VISIBLE -> binding.progressOverlay.root.visibility = VISIBLE
         }
     }
 
