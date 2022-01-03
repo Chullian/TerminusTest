@@ -33,6 +33,17 @@
         app:strokeColor="@color/black"
         app:strokeWidth="5dp" />
 
+    <ImageView
+        android:id="@+id/imagePickerIv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:tint="#AE978F8F"
+        app:layout_constraintBottom_toBottomOf="@+id/registrationImageIv"
+        app:layout_constraintEnd_toEndOf="@+id/registrationImageIv"
+        app:layout_constraintStart_toStartOf="@+id/registrationImageIv"
+        app:srcCompat="@drawable/ic_camera" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/registrationNameContainer"
         android:layout_width="0dp"

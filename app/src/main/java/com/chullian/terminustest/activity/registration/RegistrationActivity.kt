@@ -100,15 +100,22 @@ class RegistrationActivity : AppCompatActivity() {
                 }
             }
             registrationImageIv.setOnClickListener {
-                when {
-                    checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED -> {
-                        getPicture.launch("image/*")
-                    }
-                    shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> {}
-                    else -> {
-                        requestPermissionLauncher.launch(Manifest.permission.CAMERA)
-                    }
-                }
+               imagePicker()
+            }
+            imagePickerIv.setOnClickListener {
+                imagePicker()
+            }
+        }
+    }
+
+    private fun imagePicker(){
+        when {
+            checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED -> {
+                getPicture.launch("image/*")
+            }
+            shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> {}
+            else -> {
+                requestPermissionLauncher.launch(Manifest.permission.CAMERA)
             }
         }
     }
