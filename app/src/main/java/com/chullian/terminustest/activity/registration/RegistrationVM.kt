@@ -3,8 +3,8 @@ package com.chullian.terminustest.activity.registration
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.chullian.terminustest.data.Session
-import com.chullian.terminustest.data.repository.AuthRepository
+import com.chullian.terminustest.data.persistance.Session
+import com.chullian.terminustest.data.repository.auth.AuthRepository
 import com.chullian.terminustest.utils.PROGRESS_BAR_GONE
 import com.chullian.terminustest.utils.UiStates
 import com.google.firebase.auth.FirebaseAuthException

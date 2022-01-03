@@ -2,6 +2,8 @@ package com.chullian.terminustest.di
 
 import com.chullian.terminustest.data.repository.auth.AuthRepository
 import com.chullian.terminustest.data.repository.auth.AuthRepositoryImpl
+import com.chullian.terminustest.data.repository.tweet.TweetRepository
+import com.chullian.terminustest.data.repository.tweet.TweetRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -13,10 +15,10 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 
-abstract class AuthenticationModule {
+abstract class TweetModule {
     @Binds
-    abstract fun bindAuthRepository(
-        authRepositoryImpl: AuthRepositoryImpl
-    ): AuthRepository
+    abstract fun bindTweetRepository(
+        tweetRepositoryImpl: TweetRepositoryImpl
+    ): TweetRepository
 
 }

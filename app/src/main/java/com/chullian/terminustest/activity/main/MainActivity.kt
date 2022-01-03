@@ -12,6 +12,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.chullian.terminustest.activity.login.LoginActivity
+import com.chullian.terminustest.activity.tweet.TweetActivity
 import com.chullian.terminustest.databinding.ActivityMainBinding
 import com.chullian.terminustest.utils.UiStates
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,6 +41,10 @@ class MainActivity : AppCompatActivity() {
                     when(it.uiStates.message){
                         "isLoggedIn"-> if(!it.isLoggedIn){
                             startActivity(Intent(this@MainActivity,LoginActivity::class.java))
+                        }else{
+
+                            mainVm.getUserDetails()
+                            startActivity(Intent(this@MainActivity,TweetActivity::class.java))
                         }
                     }
                 }

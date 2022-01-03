@@ -7,12 +7,14 @@ import androidx.room.PrimaryKey
 /**
  * Created by binMammootty on 02/01/2022.
  */
-@Entity(tableName = "note")
-data class Note(
-    @PrimaryKey(autoGenerate = true)
-    val noteId: Long,
-    val title: String = "",
-    val note: String = "",
+@Entity(tableName = "tweet")
+data class TweetModel(
+    @PrimaryKey
+    val tweetId: String,
+    val tweet: String = "",
+    val author: String = "",
+    val authorImage: String = "",
+    var views: String = "",
     val createdAt: Long = SystemClock.currentThreadTimeMillis(),
     var updatedAt: Long = SystemClock.currentThreadTimeMillis()
 )

@@ -1,4 +1,4 @@
-package com.chullian.terminustest.data
+package com.chullian.terminustest.data.persistance
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
@@ -17,5 +17,23 @@ class Session @Inject constructor(
         get() = prefs.getBoolean("isLoggedIn", false)
         set(value) {
             prefs.edit().putBoolean("isLoggedIn", value).apply()
+        }
+
+    var user: String
+        get() = prefs.getString("user","")?:""
+        set(value) {
+            prefs.edit().putString("user", value).apply()
+        }
+
+    var userImage: String
+        get() = prefs.getString("userImage","")?:""
+        set(value) {
+            prefs.edit().putString("userImage", value).apply()
+        }
+
+    var email: String
+        get() = prefs.getString("email","")?:""
+        set(value) {
+            prefs.edit().putString("email", value).apply()
         }
 }
